@@ -1,0 +1,128 @@
+
+# 📊 Teen Mental Health Dashboard
+
+A data-driven dashboard to monitor and analyze **teen mental health risks** based on social media activity, messaging patterns, and sentiment analysis.
+
+This project uses **BERT-based NLP models** to analyze chat/messaging data and detect potential risks related to depression, anxiety, and self-harm, then visualizes the findings in an interactive dashboard.
+
+---
+
+## 🚀 Features
+
+* **Mental Health Risk Monitoring**
+
+  * Average mental health risk score over time
+  * Depression, anxiety, and self-harm score tracking
+
+* **Behavioral Insights**
+
+  * Overnight messaging timeline (sleep disruption indicator)
+  * Most used apps and messaging platforms
+
+* **Interactive Visuals**
+
+  * Line charts for trend analysis
+  * Bar charts for platform usage
+  * KPIs (Key Metrics) for quick mental health overview
+
+---
+
+## 📷 Dashboard Preview
+
+### Main KPIs & Risk Trends
+
+![Teen Mental Health Dashboard](./Screenshot%202025-08-30%20192236.png)
+
+### Messaging & App Usage
+
+![App Usage & Overnight Messages](./Screenshot%202025-08-30%20192341.png)
+
+---
+
+## 🛠️ Tech Stack
+
+* **Python** (data processing, modeling)
+* **BERT (Transformers)** – for mood and sentiment classification
+* **Plotly / Dash** – for interactive visualizations
+* **Pandas / NumPy** – for data manipulation
+* **Jupyter / Streamlit** (optional) – for experiments and deployment
+
+---
+
+## 📂 Project Structure
+
+```
+📁 teen-mental-health-dashboard
+│── data/                 # Input datasets (messages, logs, etc.)
+│── notebooks/            # Model training & EDA
+│── dashboard/            # Dashboard scripts
+│── screenshots/          # Dashboard preview images
+│── requirements.txt      # Python dependencies
+│── app.py                # Main dashboard app
+│── README.md             # Project documentation
+```
+
+---
+
+## ⚡ Installation
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/your-username/teen-mental-health-dashboard.git
+   cd teen-mental-health-dashboard
+   ```
+
+2. Create a virtual environment & install dependencies
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the dashboard
+
+   ```bash
+   python app.py
+   ```
+
+4. Open your browser at `http://127.0.0.1:8050/`
+
+---
+
+## 📊 Data Sources
+
+* **Messaging Data** (timestamp, app name, message count)
+* **Mood Scores** generated using **BERT sentiment classification**
+* **Derived Metrics** (overnight activity, risk scores, usage trends)
+
+---
+
+## 🔒 Disclaimer
+
+⚠️ This dashboard is for **educational and research purposes only**.
+It is **not a substitute** for professional mental health diagnosis or treatment.
+
+---
+
+## 🌟 Future Improvements
+
+* Expand dataset size with anonymized real-world conversations
+* Add alert system for high-risk spikes
+* Mobile-friendly dashboard deployment
+* Integration with cloud databases (Firebase, MongoDB, etc.)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+Please fork this repo and submit a pull request with improvements.
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
+
