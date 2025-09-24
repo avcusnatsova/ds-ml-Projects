@@ -1,0 +1,131 @@
+---
+
+# 🌍 Landslide Risk Prediction using Soil & Geo Data
+
+This project estimates **landslide risk** by analyzing soil images (using K-Means segmentation) and combining them with slope & rainfall data from GeoJSON. It outputs both **visualized soil segmentation** and a **GeoJSON file** with calculated risk levels (Low / Medium / High).
+
+---
+
+## 🚀 Features
+
+* 🖼️ **Soil Image Segmentation** with K-Means clustering
+* 🌱 **Soil Fragility Mapping** (clay, laterite, sandy, rock)
+* 📊 **Risk Calculation** combining:
+
+  * Soil fragility
+  * Exposed soil fraction
+  * Terrain slope (degrees)
+  * Rainfall (mm over 72h)
+* 🗺️ **GeoJSON Integration** – adds risk scores & levels for each polygon
+* 📑 **Output**:
+
+  * Segmented soil image (`segmented_output.png`)
+  * Updated GeoJSON (`landslide_risk.geojson`)
+
+---
+
+## 📂 Project Structure
+
+```
+📁 landslide-risk-prediction
+ ┣ 📜 main.py                 # Main script
+ ┣ 📜 requirements.txt        # Python dependencies
+ ┣ 📜 README.md               # Documentation
+ ┣ 🖼️ soil_sample.png          # Example input soil image (replace with your own)
+ ┣ 🌍 landslide_data.geojson   # Example input GeoJSON (replace with your own)
+ ┗ 🖼️ segmented_output.png     # Generated segmented image
+```
+
+---
+
+## ⚙️ Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/your-username/landslide-risk-prediction.git
+cd landslide-risk-prediction
+pip install -r requirements.txt
+```
+
+### Dependencies
+
+* `opencv-python`
+* `numpy`
+* `scikit-learn`
+* `matplotlib`
+* `geopandas`
+
+---
+
+## ▶️ Usage
+
+1. Place your **soil image** in the project folder (e.g., `soil_sample.png`).
+2. Place your **GeoJSON file** with slope & rainfall attributes (e.g., `landslide_data.geojson`).
+
+   * Example fields:
+
+     ```json
+     {
+       "type": "Feature",
+       "properties": { "slope": 28.5, "rainfall": 180.0 },
+       "geometry": { "type": "Polygon", "coordinates": [ ... ] }
+     }
+     ```
+3. Run the script:
+
+```bash
+python main.py
+```
+
+4. Outputs:
+
+   * `segmented_output.png` → segmented soil regions
+   * `landslide_risk.geojson` → polygons with `risk_score` and `risk_level`
+
+---
+
+## 📊 Example Output
+
+### Console
+
+```
+Original shape: (640, 480, 3) | Resized for processing: (500, 375, 3)
+Soil cluster index: 1 | Soil fraction: 0.462
+
+--- Landslide Risk Prediction ---
+Soil Type: clay
+Slope: 30.0° | Rainfall (72h): 200.0 mm
+Exposed Soil Fraction: 0.462
+Risk Score: 0.641 → Risk Level: Medium
+```
+
+### Segmented Image
+
+![Example segmented soil](segmented_output.png)
+
+### GeoJSON Attributes
+
+```json
+{
+  "risk_score": 0.641,
+  "risk_level": "Medium"
+}
+```
+
+---
+
+## 🔮 Future Improvements
+
+* ✅ Automatic soil type classification using CNN
+* ✅ Risk heatmap visualization on GeoJSON polygons
+* ✅ Web dashboard integration (e.g., Streamlit / Dash)
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License – feel free to use and modify.
+
+---
+
