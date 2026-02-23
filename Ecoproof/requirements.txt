@@ -1,0 +1,12 @@
+# Streamlit for dashboards
+streamlit==1.30.0
+
+# Data processing
+pandas==2.2.0
+numpy==1.26.5
+
+# Interactive plotting
+plotly==5.18.0
+
+# Optional: Blockchain & hashing handled by Python stdlib (hashlib, json)
+# Optional: Email alerts handled by Python stdlib (smtplib)
