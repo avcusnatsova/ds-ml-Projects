@@ -17,11 +17,9 @@ bc = Blockchain()
 # Safe Path Handling
 # -------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
 
-csv_path = os.path.join(DATA_DIR, "sensor_data.csv")
-output_csv_path = os.path.join(DATA_DIR, "sensor_data_with_anomalies.csv")
-
+csv_path = os.path.join(BASE_DIR, "data", "sensor_data_raw.csv")
+output_csv_path = os.path.join(BASE_DIR, "data", "sensor_data_with_anomalies.csv")
 # -------------------------
 # Load Sensor Data
 # -------------------------
