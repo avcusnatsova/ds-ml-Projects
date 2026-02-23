@@ -1,165 +1,136 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from anomaly_model import detect_anomalies
 import os
 
 st.set_page_config(page_title="EcoProof Public Dashboard", layout="wide")
 st.title("🌱 EcoProof Public Dashboard")
 
 # -------------------------------------------------
-# Safe Path Handling (Deployment Safe)
+# Safe Path Handling
 # -------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
-raw_csv = os.path.join(DATA_DIR, "sensor_data_raw.csv")
 processed_csv = os.path.join(DATA_DIR, "sensor_data_with_anomalies.csv")
 
 # -------------------------------------------------
-# Cached CSV Loader
+# Cached Loader
 # -------------------------------------------------
 @st.cache_data
-def load_csv(path):
+def load_data(path):
     return pd.read_csv(path)
 
 # -------------------------------------------------
-# Load or Create Processed Data
+# Load Data Automatically
 # -------------------------------------------------
-if not os.path.exists(raw_csv):
-    st.error("❌ Raw data file not found. Make sure 'data' folder is uploaded to GitHub.")
+if not os.path.exists(processed_csv):
+    st.error("❌ Processed data file not found in data folder.")
     st.stop()
 
-if not os.path.exists(processed_csv):
-    raw_df = load_csv(raw_csv)
-    processed_df = detect_anomalies(raw_df)
-    processed_df.to_csv(processed_csv, index=False)
-else:
-    processed_df = load_csv(processed_csv)
+data = load_data(processed_csv)
 
-data = processed_df.copy()
-
-# Convert timestamp safely
+# Convert timestamp
 if "timestamp" in data.columns:
     data["timestamp"] = pd.to_datetime(data["timestamp"], errors="coerce")
 
+st.success("✅ Live Data Loaded Successfully")
+
 # -------------------------------------------------
-# Plant Selection
+# Overall System Summary
 # -------------------------------------------------
-st.subheader("🔍 Search Plant")
+st.subheader("📊 Overall Pollution Overview")
 
-plant_input = st.text_input("Enter Plant Name or Plant ID:")
+total_plants = data["plant_id"].nunique()
+total_records = len(data)
+total_anomalies = data["anomaly_flag"].sum() if "anomaly_flag" in data.columns else 0
 
-if plant_input:
-    plant_data = data[
-        (data['plant_name'].astype(str).str.lower() == plant_input.lower()) |
-        (data['plant_id'].astype(str) == plant_input)
-    ]
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Plants", total_plants)
+col2.metric("Total Records", total_records)
+col3.metric("Total Anomalies", total_anomalies)
 
-    if plant_data.empty:
-        st.warning("⚠️ Plant not found.")
-    else:
-        plant_data = plant_data.sort_values("timestamp")
-        latest = plant_data.iloc[-1]
+# -------------------------------------------------
+# Plant Dropdown (Auto-populated)
+# -------------------------------------------------
+st.subheader("🏭 Select Plant")
 
-        # ---------------- KPI Section ----------------
-        st.subheader("💨 Current Pollutant Levels")
-        kpi_cols = st.columns(5)
+plant_list = sorted(data["plant_name"].unique())
+selected_plant = st.selectbox("Choose a Plant", plant_list)
 
-        pollutants = ['pm2_5', 'pm10', 'so2_level', 'no2_level', 'aqi']
+plant_data = data[data["plant_name"] == selected_plant].sort_values("timestamp")
+latest = plant_data.iloc[-1]
 
-        for i, pollutant in enumerate(pollutants):
-            value = latest.get(pollutant, "N/A")
-            kpi_cols[i].metric(label=pollutant.upper(), value=value)
+# -------------------------------------------------
+# KPI Section
+# -------------------------------------------------
+st.subheader("💨 Current Pollutant Levels")
 
-        # ---------------- Bar Chart ----------------
-        st.subheader("📊 Latest Pollutant Levels")
+pollutants = ['pm2_5', 'pm10', 'so2_level', 'no2_level', 'aqi']
+kpi_cols = st.columns(len(pollutants))
 
-        severity = latest.get('anomaly_severity', "Normal") if latest.get('anomaly_flag', False) else "Normal"
+for i, pollutant in enumerate(pollutants):
+    kpi_cols[i].metric(pollutant.upper(), latest.get(pollutant, "N/A"))
 
-        bar_data = pd.DataFrame({
-            "Pollutant": pollutants,
-            "Value": [latest.get(p, 0) for p in pollutants],
-            "Severity": [severity] * len(pollutants)
-        })
+# -------------------------------------------------
+# Bar Chart
+# -------------------------------------------------
+st.subheader("📊 Latest Pollutant Levels")
 
-        severity_colors = {
-            "Normal": "green",
-            "Moderate": "yellow",
-            "High": "orange",
-            "Violation": "red",
-            "Severe": "red"
-        }
+severity = latest.get('anomaly_severity', "Normal")
 
-        fig_bar = px.bar(
-            bar_data,
-            x="Pollutant",
-            y="Value",
-            color="Severity",
-            color_discrete_map=severity_colors,
-            text="Value"
-        )
+bar_data = pd.DataFrame({
+    "Pollutant": pollutants,
+    "Value": [latest.get(p, 0) for p in pollutants]
+})
 
-        st.plotly_chart(fig_bar, use_container_width=True)
+fig_bar = px.bar(
+    bar_data,
+    x="Pollutant",
+    y="Value",
+    text="Value"
+)
 
-        # ---------------- Line Chart ----------------
-        st.subheader("📈 Pollutant Levels Over Time")
+st.plotly_chart(fig_bar, use_container_width=True)
 
-        fig_line = px.line(
-            plant_data,
-            x="timestamp",
-            y=pollutants,
-            title=f"{latest['plant_name']} Emission Trends"
-        )
+# -------------------------------------------------
+# Line Chart
+# -------------------------------------------------
+st.subheader("📈 Emission Trends Over Time")
 
-        st.plotly_chart(fig_line, use_container_width=True)
+fig_line = px.line(
+    plant_data,
+    x="timestamp",
+    y=pollutants,
+    title=f"{selected_plant} Emission Trends"
+)
 
-        # ---------------- Anomaly Section ----------------
-        st.subheader("⚠️ Anomalies")
+st.plotly_chart(fig_line, use_container_width=True)
 
-        anomalies = plant_data[plant_data.get('anomaly_flag', False)]
+# -------------------------------------------------
+# Anomaly Section
+# -------------------------------------------------
+st.subheader("⚠️ Anomalies")
 
-        if not anomalies.empty:
-            st.dataframe(
-                anomalies[['timestamp', 'pm2_5','pm10','so2_level','no2_level','aqi','anomaly_severity']],
-                use_container_width=True
-            )
-
-            pie_data = anomalies['anomaly_severity'].value_counts().reset_index()
-            pie_data.columns = ['Severity', 'Count']
-
-            fig_pie = px.pie(
-                pie_data,
-                names='Severity',
-                values='Count',
-                color='Severity',
-                color_discrete_map=severity_colors
-            )
-
-            st.plotly_chart(fig_pie, use_container_width=True)
-        else:
-            st.success("✅ No anomalies detected for this plant.")
-
-        # ---------------- Pollution Verdict ----------------
-        st.subheader("🌡 Pollution Verdict")
-
-        if anomalies.empty:
-            st.success("Plant is operating normally ✅")
-        else:
-            severity_mapping = {
-                "Normal": 0,
-                "Moderate": 1,
-                "High": 2,
-                "Violation": 3,
-                "Severe": 4
-            }
-
-            max_severity = anomalies['anomaly_severity'].map(severity_mapping).max()
-
-            if max_severity <= 1:
-                st.warning("Plant has moderate pollution ⚠️")
-            else:
-                st.error("Plant is polluting more than allowed ❌")
-
+if "anomaly_flag" in plant_data.columns:
+    anomalies = plant_data[plant_data["anomaly_flag"] == True]
 else:
-    st.info("Enter a Plant Name or Plant ID to view data.")
+    anomalies = pd.DataFrame()
+
+if not anomalies.empty:
+    st.dataframe(
+        anomalies[['timestamp','pm2_5','pm10','so2_level','no2_level','aqi','anomaly_severity']],
+        use_container_width=True
+    )
+else:
+    st.success("No anomalies detected for this plant.")
+
+# -------------------------------------------------
+# Pollution Verdict
+# -------------------------------------------------
+st.subheader("🌡 Pollution Verdict")
+
+if anomalies.empty:
+    st.success("Plant is operating normally ✅")
+else:
+    st.error("Plant is exceeding safe pollution limits ❌")
