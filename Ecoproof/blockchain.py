@@ -4,10 +4,15 @@ from time import time
 import os
 import pandas as pd
 
+# Guard against Streamlit's file watcher causing circular re-imports
+if __name__ == "__main__":
+    pass
+
 CHAIN_FILE = "data/blockchain_data.json"
 
 if not os.path.exists("data"):
     os.makedirs("data")
+
 
 class Block:
     def __init__(self, index, timestamp, data, previous_hash):
@@ -41,6 +46,7 @@ class Block:
             "row_hash": self.row_hash
         }
 
+
 class Blockchain:
     def __init__(self):
         self.chain = []
@@ -66,7 +72,7 @@ class Blockchain:
     def is_chain_valid(self):
         for i in range(1, len(self.chain)):
             current = self.chain[i]
-            previous = self.chain[i-1]
+            previous = self.chain[i - 1]
             if current.hash != current.compute_hash():
                 return False
             if current.previous_hash != previous.hash:
