@@ -1,0 +1,103 @@
+🌱 EcoProof
+Real-Time Environmental Monitoring & Emissions Tracking System
+
+EcoProof is a real-time environmental monitoring system that tracks industrial emissions and air quality data, detects anomalies, and provides transparent dashboards for public awareness and administrative action.
+
+It combines data analytics, anomaly detection, blockchain logging, and interactive dashboards to promote environmental accountability.
+
+🚀 Features
+
+📡 Real-Time Sensor Data Monitoring
+
+📊 Interactive Public Dashboard (Streamlit)
+
+🛑 Anomaly Detection for Pollution Spikes
+
+🔐 Blockchain-Based Data Logging for Transparency
+
+📈 Visual Pollution Trends & AQI Analysis
+
+📂 CSV Upload & Data Processing
+
+🛠️ Tech Stack
+
+Frontend & Dashboard: Streamlit
+
+Backend: Python
+
+Data Processing: Pandas
+
+Visualization: Plotly
+
+Blockchain Logging: Custom Python Blockchain
+
+Deployment: Streamlit Cloud / Local Deployment
+
+📂 Project Structure
+EcoProof/
+│
+├── public_dashboard.py        # Public pollution monitoring dashboard
+├── admin_dashboard.py         # Admin monitoring & logging dashboard
+├── anomaly_model.py           # Pollution anomaly detection logic
+├── blockchain.py              # Custom blockchain implementation
+├── data/
+│   └── blockchain_data.json   # Stored blockchain records
+│
+└── README.md
+📊 How It Works
+
+Sensors generate environmental data (CO, NO₂, SO₂, PM2.5, PM10, AQI, etc.).
+
+Data is uploaded via CSV.
+
+The anomaly detection model checks for pollution threshold violations.
+
+New data entries are logged securely using blockchain.
+
+Dashboards display real-time trends and alerts.
+
+⚙️ Installation & Setup
+1️⃣ Clone the Repository
+git clone https://github.com/your-username/ecoproof.git
+cd ecoproof
+2️⃣ Install Dependencies
+pip install -r requirements.txt
+3️⃣ Run the Public Dashboard
+streamlit run public_dashboard.py
+4️⃣ Run the Admin Dashboard
+streamlit run admin_dashboard.py
+📈 Sample Data Format
+
+Your CSV file should contain columns like:
+
+timestamp, sensor_id, plant_name, plant_id,
+co_level, no2_level, so2_level,
+pm2_5, pm10, o3_level,
+temperature, humidity,
+wind_speed, wind_direction,
+aqi, pollution_score, anomaly_flag
+🎯 Project Objective
+
+Increase environmental transparency
+
+Detect pollution anomalies instantly
+
+Provide actionable insights for authorities
+
+Encourage sustainable industrial practices
+
+🔮 Future Improvements
+
+Live IoT sensor integration
+
+Machine Learning-based predictive modeling
+
+Government threshold API integration
+
+User authentication system
+
+Cloud database integration
+
+🌍 Vision
+
+“Track pollution. Ensure accountability. Build a cleaner tomorrow.”
