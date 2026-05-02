@@ -1,0 +1,118 @@
+# 📦 Trustistics: Blockchain-Powered Cold-Chain Provenance
+
+![Trustistics Banner](trustistics_banner_v2_1777534273700.png)
+
+> **Eliminating manual loopholes in cold-chain logistics through cryptographically verifiable IoT telemetry and blockchain anchoring.**
+
+---
+
+## 🚀 Overview
+
+**Trustistics** is a next-generation provenance platform designed to solve the "manual entry loophole" in temperature-sensitive supply chains. By integrating **IoT hardware sensors** directly with **Ethereum-based smart contracts**, Trustistics ensures that every degree of temperature fluctuation and every document handoff is immutable, transparent, and independently verifiable.
+
+Whether you are a manufacturer, a warehouse operator, or an end-consumer, Trustistics provides the definitive truth about your shipment's journey.
+
+## ✨ Key Features
+
+- **🔐 Immutable Provenance**: Every sensor reading and document is anchored to the blockchain using SHA-256 hashing.
+- **🌡️ Automated Telemetry**: 100% sensor-driven data collection. Manual entry is removed to prevent fraud.
+- **🚨 Dynamic Breach Detection**: Real-time monitoring against shipment-specific temperature thresholds with automatic risk scoring.
+- **📱 QR-Driven Verification**: A public-facing verification UI allows anyone with a QR code to audit the entire cold-chain history.
+- **📊 Multi-Role Dashboards**: Specialized interfaces for Administrators, Manufacturers, Warehouse Operators, and Drivers.
+- **📂 Secure Document Handoff**: Cryptographic anchoring of Certificates of Origin, Bills of Lading, and Quality Certificates.
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    A[IoT Sensors] -->|REST API| B(FastAPI Backend)
+    C[Web UI Dashboards] -->|REST API| B
+    B -->|Store Metadata| D[(MongoDB)]
+    B -->|Anchor Hash| E[Ethereum / Solidity Contract]
+    F[Public Auditor] -->|Scan QR| G(Public Verification UI)
+    G -->|Fetch Verified Data| B
+```
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/), [Tailwind CSS](https://tailwindcss.com/), [GSAP](https://greensock.com/gsap/) (Animations).
+- **Backend**: [FastAPI](https://fastapi.tiangolo.com/), [Python 3.10+](https://www.python.org/), [Pydantic](https://docs.pydantic.dev/).
+- **Database**: [MongoDB](https://www.mongodb.com/).
+- **Blockchain**: [Solidity](https://soliditylang.org/), [Hardhat](https://hardhat.org/), [Web3.py](https://web3py.readthedocs.io/).
+- **IoT**: Python-based telemetry simulation.
+
+---
+
+## 🚦 Getting Started
+
+### 1. Prerequisites
+- Node.js (v18+)
+- Python (v3.10+)
+- MongoDB (Running locally or on Atlas)
+- Hardhat (for blockchain)
+
+### 2. Backend Setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+# Configure your MongoDB URI and Blockchain RPC in .env
+uvicorn main:app --reload
+```
+
+### 3. Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 4. Blockchain Deployment
+```bash
+cd blockchain
+npm install
+npx hardhat run scripts/deploy.js --network localhost
+```
+
+### 5. IoT Simulator (Simulate a shipment)
+```bash
+# Start a sensor simulation for a specific shipment ID
+python iot_simulator.py SHP-3601 -72
+```
+
+---
+
+## 📦 Project Structure
+
+```text
+├── backend/            # FastAPI source code, routes, and services
+├── frontend/           # React + Vite + TSX frontend
+├── blockchain/         # Hardhat project with Solidity contracts
+├── iot_simulator.py    # Standalone IoT sensor simulation script
+├── qrcodes/            # Generated QR codes for shipment tracking
+└── uploads/            # Encrypted/Anchored shipment documents
+```
+
+---
+
+## 🛡️ Security & Compliance
+
+Trustistics aligns with **PS1 problem statements** for supply chain integrity:
+- **Zero-Trust Telemetry**: No manual data entry allowed for critical sensor logs.
+- **Proof-of-Integrity**: Any attempt to modify data post-facto will fail cryptographic verification against the on-chain hash.
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Built with ❤️ by the Trustistics Team
+</p>
