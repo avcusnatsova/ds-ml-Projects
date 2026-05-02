@@ -8,7 +8,7 @@ from datetime import datetime
 
 st.set_page_config(page_title="EcoProof", page_icon="", layout="wide", initial_sidebar_state="collapsed")
 
-API_BASE   = "http://127.0.0.1:5000"
+API_BASE   = "https://attractive-transformation-production-4899.up.railway.app"
 DATA_FILE  = "data/sensor_data.csv"
 CHAIN_FILE = "data/blockchain_data.json"
 

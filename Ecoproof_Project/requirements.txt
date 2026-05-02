@@ -1,8 +1,7 @@
 flask
 flask-cors
-pandas
 streamlit
-plotly
-requests
+pandas
 reportlab
-gunicorn
+requests
+plotly
